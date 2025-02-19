@@ -7,9 +7,13 @@ class ActorsController < ApplicationController
 
   def show
     the_id = params.fetch("path_id")
-    @the_actor = Actor.where({:id => the_id }).at(0)
-    
-    render({ :template => "actor_templates/show" })
+    @the_actor = Actor.find_by(id: the_id)
+  
+    if @the_actor.nil?
+      redirect_to("/actors", notice: "Actor not found.") and return
+    end
+  
+    render({ template: "actor_templates/show" })
   end
 
   def create
